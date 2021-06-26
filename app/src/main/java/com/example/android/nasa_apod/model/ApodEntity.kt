@@ -5,9 +5,11 @@ import com.google.gson.annotations.SerializedName
 import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import androidx.room.Entity
 
 @Keep
 @Parcelize
+@Entity(tableName = "apod")
 data class ApodEntity(
     @SerializedName("copyright")
     val copyright: String,

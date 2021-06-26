@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object ApplicationModule {
+object NetworkModule {
 
     private const val TIMEOUT = 20L
     private const val BASE_URL = "https://api.nasa.gov/"
