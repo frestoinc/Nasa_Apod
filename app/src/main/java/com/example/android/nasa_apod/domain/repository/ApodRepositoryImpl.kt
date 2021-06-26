@@ -6,7 +6,6 @@ import com.example.android.nasa_apod.domain.util.Resource
 import com.example.android.nasa_apod.domain.util.networkBoundResource
 import com.example.android.nasa_apod.model.ApodEntity
 import kotlinx.coroutines.flow.Flow
-import timber.log.Timber
 import javax.inject.Inject
 
 class ApodRepositoryImpl @Inject constructor(
@@ -26,19 +25,14 @@ class ApodRepositoryImpl @Inject constructor(
                 appDao.getAll()
             },
             createCall = {
-                apodService.getApodList(param).also {
-                    Timber.e("getApodList: $it")
-                    it
-                }
+                apodService.getApodList(param)
             },
             saveToDb = { entities ->
-                Timber.e("entities: $entities")
                 appDao.deleteAll()
                 appDao.saveEntries(entities)
 
             },
             shouldFetch = {
-                Timber.e("shouldFetch: $it")
                 isRefresh
             },
             onCallSuccess = onSuccess,

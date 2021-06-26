@@ -10,7 +10,8 @@ import com.example.android.nasa_apod.R
 import com.example.android.nasa_apod.databinding.MainViewholderBinding
 import com.example.android.nasa_apod.model.ApodEntity
 
-class MainAdapter : ListAdapter<ApodEntity, MainViewHolder>(MainAdapterComparator()) {
+class MainAdapter(private val onItemClick: (ApodEntity) -> Unit) :
+    ListAdapter<ApodEntity, MainViewHolder>(MainAdapterComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder =
         MainViewHolder(
@@ -18,20 +19,26 @@ class MainAdapter : ListAdapter<ApodEntity, MainViewHolder>(MainAdapterComparato
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), onItemClick
         )
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        getItem(position)?.let {
+            holder.bind(it)
+        }
     }
 
 }
 
-class MainViewHolder(private val binding: MainViewholderBinding) :
+class MainViewHolder(
+    private val binding: MainViewholderBinding,
+    private val onItemClick: (ApodEntity) -> Unit
+) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(entity: ApodEntity) {
         binding.apply {
+            root.setOnClickListener { onItemClick(entity) }
             Glide.with(itemView)
                 .load(entity.hdurl)
                 .thumbnail(
