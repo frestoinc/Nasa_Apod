@@ -2,6 +2,7 @@ package com.example.android.nasa_apod.di
 
 import com.example.android.nasa_apod.BuildConfig
 import com.example.android.nasa_apod.api.ApodService
+import com.example.android.nasa_apod.di.key.ApiKey
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -20,6 +21,11 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val TIMEOUT = 20L
+
+    @ApiKey
+    @Provides
+    @Singleton
+    fun provideApiKey(): String = "NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo"
 
     @Provides
     @Singleton

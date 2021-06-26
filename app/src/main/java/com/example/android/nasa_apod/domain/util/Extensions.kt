@@ -5,14 +5,20 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
-@ExperimentalCoroutinesApi
+/**
+ * https://developer.android.com/jetpack/guide
+ */
+
 inline fun <ResultType, RequestType> networkBoundResource(
     crossinline loadFromDb: () -> Flow<ResultType>,
     crossinline createCall: suspend () -> RequestType,
@@ -43,10 +49,11 @@ inline fun <ResultType, RequestType> networkBoundResource(
     }
 }
 
-inline fun <reified T> T.toJsonString(): String = Gson().toJson(this)
 
-inline fun <reified T> T.toCustomMap(): Map<String, String> = Gson().fromJson(
-    toJsonString(),
+inline fun <reified T> T.toJsonString(gson: Gson): String = gson.toJson(this)
+
+inline fun <reified T> T.toCustomMap(gson: Gson): Map<String, String> = gson.fromJson(
+    toJsonString(gson),
     object : TypeToken<Map<String, String>>() {}.type
 )
 
@@ -63,3 +70,14 @@ fun Fragment.showSnackBarError(message: String, view: View = requireView()) =
 
 val <T> T.exhaustive: T
     get() = this
+
+fun Date.toString(): String {
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return formatter.format(this)
+}
+
+fun LocalDate.formatter(): String = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+
+val getCurrentDate: String = LocalDate.now().formatter()
+
+val getPastDate: String = LocalDate.now().minusDays(30).formatter()

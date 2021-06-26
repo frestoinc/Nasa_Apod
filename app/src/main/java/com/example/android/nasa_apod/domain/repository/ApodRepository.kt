@@ -11,6 +11,4 @@ interface ApodRepository {
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit
     ): Flow<Resource<List<ApodEntity>>>
-
-    fun loadApods(): Flow<List<ApodEntity>>
 }

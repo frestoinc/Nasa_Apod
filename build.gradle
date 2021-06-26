@@ -9,7 +9,6 @@ buildscript {
     ext.retrofitVersion = "2.9.0"
     ext.okhttpVersion = "4.9.0"
     ext.gsonVersion = "2.8.6"
-    ext.pagingVersion = "3.0.0"
     ext.glideVersion = "4.11.0"
     repositories {
         google()

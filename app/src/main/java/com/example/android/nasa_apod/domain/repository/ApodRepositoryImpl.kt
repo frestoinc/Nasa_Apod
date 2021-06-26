@@ -5,12 +5,10 @@ import com.example.android.nasa_apod.domain.dao.ApodDao
 import com.example.android.nasa_apod.domain.util.Resource
 import com.example.android.nasa_apod.domain.util.networkBoundResource
 import com.example.android.nasa_apod.model.ApodEntity
-import com.example.android.nasa_apod.model.ApodPost
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
 class ApodRepositoryImpl @Inject constructor(
     private val appDao: ApodDao,
     private val apodService: ApodService
@@ -19,7 +17,7 @@ class ApodRepositoryImpl @Inject constructor(
 
     override fun getLatestApods(
         isRefresh: Boolean,
-        param : Map<String, String>,
+        param: Map<String, String>,
         onSuccess: () -> Unit,
         onError: (Throwable) -> Unit
     ): Flow<Resource<List<ApodEntity>>> =
@@ -29,21 +27,21 @@ class ApodRepositoryImpl @Inject constructor(
             },
             createCall = {
                 apodService.getApodList(param).also {
-                    it.list
+                    Timber.e("getApodList: $it")
+                    it
                 }
             },
-            saveToDb = { entity ->
-                appDao.saveEntries(entity.list)
+            saveToDb = { entities ->
+                Timber.e("entities: $entities")
+                appDao.deleteAll()
+                appDao.saveEntries(entities)
 
             },
             shouldFetch = {
+                Timber.e("shouldFetch: $it")
                 isRefresh
             },
             onCallSuccess = onSuccess,
             onCallFailed = onError
-
         )
-
-    override fun loadApods(): Flow<List<ApodEntity>> =
-        appDao.getAll()
 }

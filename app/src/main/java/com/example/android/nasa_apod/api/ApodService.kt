@@ -1,6 +1,6 @@
 package com.example.android.nasa_apod.api
 
-import com.example.android.nasa_apod.model.ApodEntityList
+import com.example.android.nasa_apod.model.ApodEntity
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 
@@ -11,5 +11,5 @@ interface ApodService {
     }
 
     @GET("planetary/apod")
-    suspend fun getApodList(@QueryMap params : Map<String, String>): ApodEntityList
+    suspend fun getApodList(@QueryMap params : Map<String, String>): List<ApodEntity>
 }

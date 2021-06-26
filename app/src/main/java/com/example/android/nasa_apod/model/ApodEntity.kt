@@ -12,22 +12,22 @@ import androidx.room.PrimaryKey
 @Parcelize
 @Entity(tableName = "apod")
 data class ApodEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true) //1
     var id: Int = 0,
-    @SerializedName("copyright")
-    val copyright: String,
-    @SerializedName("date")
-    val date: String,
-    @SerializedName("explanation")
-    val explanation: String,
-    @SerializedName("hdurl")
-    val hdurl: String,
-    @SerializedName("media_type")
-    val mediaType: String,
-    @SerializedName("service_version")
-    val serviceVersion: String,
-    @SerializedName("title")
-    val title: String,
-    @SerializedName("url")
-    val url: String
+    @SerializedName("copyright")  //2
+    val copyright: String?,
+    @SerializedName("date") //3
+    val date: String?,
+    @SerializedName("explanation") //4
+    val explanation: String?,
+    @SerializedName("hdurl") //5
+    val hdurl: String?,
+    @SerializedName("media_type") //6
+    val mediaType: String?,
+    @SerializedName("service_version") //7
+    val serviceVersion: String?,
+    @SerializedName("title") //8
+    val title: String?,
+    @SerializedName("url") //9
+    val url: String?
 ) : Parcelable {}

@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.nasa_apod"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -33,6 +33,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
 
     buildFeatures {
@@ -110,11 +111,7 @@ dependencies {
      * Glide
      */
     implementation "com.github.bumptech.glide:glide:$glideVersion"
-
-    /**
-     * Pagination
-     */
-    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
