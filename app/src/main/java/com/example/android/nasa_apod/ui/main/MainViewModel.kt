@@ -1,36 +1,58 @@
 package com.example.android.nasa_apod.ui.main
 
-import android.os.Handler
-import android.os.Looper
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.android.nasa_apod.domain.repository.ApodRepository
-import com.example.android.nasa_apod.model.ApodEntity
+import com.example.android.nasa_apod.domain.util.Event
+import com.example.android.nasa_apod.domain.util.Refresh
+import com.example.android.nasa_apod.domain.util.Resource
+import com.example.android.nasa_apod.domain.util.toCustomMap
+import com.example.android.nasa_apod.model.ApodPost
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import timber.log.Timber
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: ApodRepository) : ViewModel() {
 
-    private val _listFlow: Flow<List<ApodEntity>> = flow {
-        emit(emptyList())
+
+    private val errorEventChannel = Channel<Event>()
+    val errorEvents = errorEventChannel.receiveAsFlow()
+
+    private val refreshChannel = Channel<Refresh>()
+    private val refreshEvent = refreshChannel.receiveAsFlow()
+
+    val dateUpdateChannel = Channel<ApodPost>()
+    val dateEvent = dateUpdateChannel.receiveAsFlow()
+
+    val lists = refreshEvent
+        .flatMapLatest { refresh ->
+            repository.getLatestApods(
+                isRefresh = refresh == Refresh.FORCE,
+                param = ApodPost("","").toCustomMap(),
+                onSuccess = {},
+                onError = { throwable ->
+                    viewModelScope.launch {
+                        errorEventChannel.send(Event.ShowErrorMessage(throwable))
+                    }
+                }
+            )
+        }
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    fun loadData() {
+        if (lists.value !is Resource.Loading) {
+            viewModelScope.launch { refreshChannel.send(Refresh.NORMAL) }
+        }
     }
 
-
-    val refreshing: ObservableBoolean = ObservableBoolean(false)
-
-    val lists = _listFlow.asLiveData()
-
     fun refreshData() {
-        refreshing.set(true)
-        Timber.e("refreshing")
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            refreshing.set(false)
-            Timber.e("stop refreshing")
-        }, 5000)
+        if (lists.value !is Resource.Loading) {
+            viewModelScope.launch { refreshChannel.send(Refresh.FORCE) }
+        }
     }
 }

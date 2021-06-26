@@ -6,6 +6,8 @@
 
     <!-- Main Fragment -->
     <string name="mainFragmentTitle">Picture of the Day</string>
+    <string name="mainErrorEvent">Error occurred: %s</string>
+    <string name="mainErrorUnknown">Unknown</string>
 
     <!-- Menu -->
     <string name="menuRefresh">Refresh</string>

@@ -20,7 +20,6 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val TIMEOUT = 20L
-    private const val BASE_URL = "https://api.nasa.gov/"
 
     @Provides
     @Singleton
@@ -52,5 +51,5 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideApodService(client: OkHttpClient, gson: Gson): ApodService =
-        provideRetrofit(BASE_URL, client, gson).create(ApodService::class.java)
+        provideRetrofit(ApodService.BASE_URL, client, gson).create(ApodService::class.java)
 }

@@ -1,32 +1,33 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
+   <!-- <data>
 
         <import type="android.view.View" />
 
         <variable
             name="listVm"
             type="com.example.android.nasa_apod.ui.main.MainViewModel" />
-    </data>
+    </data>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        
+
+        <!-- app:refreshing="@{listVm.lists == Refresh.L .FORCE}"
+            app:onRefreshListener="@{() -> listVm.refreshData()}" -->
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/mf_srl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:refreshing="@{listVm.refreshing}"
-            app:onRefreshListener="@{() -> listVm.refreshData()}">
+            android:layout_height="match_parent">
 
+            <!--android:visibility="@{listVm.lists ? View.GONE  : View.VISIBLE}"-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mf_rc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
-                android:visibility="@{listVm.lists.empty ? View.GONE  : View.VISIBLE}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -53,11 +54,12 @@
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mf_img" />
 
+        <!-- android:visibility="@{listVm.lists.empty ? View.VISIBLE  : View.GONE}"-->
+
         <androidx.constraintlayout.widget.Group
             android:id="@+id/mf_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{listVm.lists.empty ? View.VISIBLE  : View.GONE}"
             app:constraint_referenced_ids="mf_img,mf_text_empty" />
 
 
