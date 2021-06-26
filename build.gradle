@@ -6,6 +6,9 @@ buildscript {
     ext.lifecycleVersion = "2.3.1"
     ext.timberVersion = "4.7.1"
     ext.roomVersion = "2.3.0"
+    ext.retrofitVersion = "2.9.0"
+    ext.okhttpVersion = "4.9.0"
+    ext.gsonVersion = "2.8.6"
     repositories {
         google()
         mavenCentral()
