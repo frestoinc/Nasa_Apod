@@ -1,4 +1,4 @@
-package com.example.android.nasa_apod.data.remote
+package com.example.android.nasa_apod.api
 
 import com.example.android.nasa_apod.model.ApodEntity
 import retrofit2.http.GET

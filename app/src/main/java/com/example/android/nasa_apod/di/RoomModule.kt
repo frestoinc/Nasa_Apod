@@ -2,8 +2,8 @@ package com.example.android.nasa_apod.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.android.nasa_apod.data.local.dao.ApodDao
-import com.example.android.nasa_apod.data.local.db.AppDatabase
+import com.example.android.nasa_apod.domain.dao.ApodDao
+import com.example.android.nasa_apod.domain.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

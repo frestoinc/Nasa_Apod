@@ -1,7 +1,7 @@
 package com.example.android.nasa_apod.di
 
 import com.example.android.nasa_apod.BuildConfig
-import com.example.android.nasa_apod.data.remote.ApodService
+import com.example.android.nasa_apod.api.ApodService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

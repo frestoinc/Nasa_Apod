@@ -1,4 +1,4 @@
-package com.example.android.nasa_apod.data.local.dao
+package com.example.android.nasa_apod.domain.dao
 
 import androidx.room.*
 import com.example.android.nasa_apod.model.ApodEntity
