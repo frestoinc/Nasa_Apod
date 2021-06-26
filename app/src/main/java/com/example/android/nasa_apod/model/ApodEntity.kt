@@ -6,11 +6,14 @@ import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 @Keep
 @Parcelize
 @Entity(tableName = "apod")
 data class ApodEntity(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     @SerializedName("copyright")
     val copyright: String,
     @SerializedName("date")
@@ -27,4 +30,4 @@ data class ApodEntity(
     val title: String,
     @SerializedName("url")
     val url: String
-) : Parcelable
+) : Parcelable {}

@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">nasa_apod</string>
+    <string name="app_name">Nasa Apod</string>
+
+    <!-- List UI -->
+    <string name="listEmpty">Oops. No entries found</string>
+
+    <!-- Main Fragment -->
+    <string name="mainFragmentTitle">Picture of the Day</string>
+
+    <!-- Menu -->
+    <string name="menuRefresh">Refresh</string>
 </resources>

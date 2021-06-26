@@ -37,11 +37,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(url: String, client : OkHttpClient, gson : Gson): Retrofit = Retrofit.Builder().apply {
-        baseUrl(url)
-        addConverterFactory(GsonConverterFactory.create(gson))
-        client(client)
-    }.build()
+    fun provideRetrofit(url: String, client: OkHttpClient, gson: Gson): Retrofit =
+        Retrofit.Builder().apply {
+            baseUrl(url)
+            addConverterFactory(GsonConverterFactory.create(gson))
+            client(client)
+        }.build()
 
     @Provides
     fun provideGson(): Gson = GsonBuilder().apply {
@@ -50,6 +51,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApodService(client : OkHttpClient, gson : Gson): ApodService =
+    fun provideApodService(client: OkHttpClient, gson: Gson): ApodService =
         provideRetrofit(BASE_URL, client, gson).create(ApodService::class.java)
 }

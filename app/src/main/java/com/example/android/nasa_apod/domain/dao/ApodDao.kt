@@ -11,7 +11,7 @@ interface ApodDao {
     suspend fun saveEntries(list: List<ApodEntity>)
 
     @Query("SELECT * FROM apod")
-    fun getAll(): Flow<List<Entity>>
+    fun getAll(): Flow<List<ApodEntity>>
 
     @Query("DELETE FROM apod")
     suspend fun deleteAll()

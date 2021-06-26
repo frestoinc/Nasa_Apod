@@ -1,0 +1,65 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="listVm"
+            type="com.example.android.nasa_apod.ui.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/mf_srl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:refreshing="@{listVm.refreshing}"
+            app:onRefreshListener="@{() -> listVm.refreshData()}">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mf_rc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:visibility="@{listVm.lists.empty ? View.GONE  : View.VISIBLE}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!--tools:listitem="@layout/"-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/mf_img"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:src="@drawable/ic_error"
+            app:layout_constraintBottom_toTopOf="@+id/mf_text_empty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mf_text_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/listEmpty"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mf_img" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/mf_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{listVm.lists.empty ? View.VISIBLE  : View.GONE}"
+            app:constraint_referenced_ids="mf_img,mf_text_empty" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -25,6 +25,6 @@ object RoomModule {
         ).allowMainThreadQueries().build()
 
     @Provides
-    fun providePasswordListDao(database: AppDatabase): ApodDao =
+    fun provideApodDao(database: AppDatabase): ApodDao =
         database.apodListDao()
 }

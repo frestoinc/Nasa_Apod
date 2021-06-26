@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface ApodService {
 
     @GET("planetary/apod")
-    suspend fun getApodList() : List<ApodEntity>
+    suspend fun getApodList(): ApodEntity
 }
