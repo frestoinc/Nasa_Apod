@@ -32,11 +32,6 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
             binding.dfExplanation.text = it.explanation ?: getString(R.string.mainErrorUnknown)
             Glide.with(binding.root)
                 .load(it.hdurl)
-                .thumbnail(
-                    Glide.with(binding.root)
-                        .load(R.drawable.ic_error)
-                )
-                .error(R.drawable.ic_error)
                 .into(binding.dfImage)
         }
     }

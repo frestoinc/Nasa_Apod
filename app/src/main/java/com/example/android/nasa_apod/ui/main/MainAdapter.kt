@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.android.nasa_apod.R
 import com.example.android.nasa_apod.databinding.MainViewholderBinding
 import com.example.android.nasa_apod.model.ApodEntity
 
@@ -41,11 +40,6 @@ class MainViewHolder(
             root.setOnClickListener { onItemClick(entity) }
             Glide.with(itemView)
                 .load(entity.hdurl)
-                .thumbnail(
-                    Glide.with(itemView)
-                        .load(R.drawable.ic_error)
-                )
-                .error(R.drawable.ic_error)
                 .into(binding.mvhImage)
             binding.mvhCopyright.text = entity.copyright ?: "Unknown"
             binding.mvhTitle.text = entity.title ?: "Unknown"

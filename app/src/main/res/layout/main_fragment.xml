@@ -51,6 +51,7 @@
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@color/bluePrimary"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mf_img" />
 
