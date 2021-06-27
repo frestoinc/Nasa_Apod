@@ -15,15 +15,21 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var navController: NavController
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityMainBinding.inflate(layoutInflater).also {
+        val binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
             setSupportActionBar(it.appBarMain.toolbar)
         }
 
         supportFragmentManager.findFragmentById(R.id.nav_host_content).also {
             navController = (it as NavHostFragment).navController
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                if (destination.id == R.id.nav_detail) {
+                    binding.appBarMain.toolbar.title = ""
+                }
+            }
         }
 
         AppBarConfiguration.Builder(setOf(R.id.nav_main)).build().also {

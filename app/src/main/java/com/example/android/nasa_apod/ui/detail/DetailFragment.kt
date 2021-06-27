@@ -15,8 +15,6 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
-
         _binding = DetailFragmentBinding.bind(view)
         setupBinding()
     }

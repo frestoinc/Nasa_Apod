@@ -2,6 +2,10 @@ package com.example.android.nasa_apod.domain.util
 
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -10,10 +14,10 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 /**
  * https://developer.android.com/jetpack/guide
@@ -49,7 +53,6 @@ inline fun <ResultType, RequestType> networkBoundResource(
     }
 }
 
-
 inline fun <reified T> T.toJsonString(gson: Gson): String = gson.toJson(this)
 
 inline fun <reified T> T.toCustomMap(gson: Gson): Map<String, String> = gson.fromJson(
@@ -68,16 +71,34 @@ sealed class Event {
 fun Fragment.showSnackBarError(message: String, view: View = requireView()) =
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
 
-val <T> T.exhaustive: T
-    get() = this
-
-fun Date.toString(): String {
-    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    return formatter.format(this)
+fun FragmentManager.showCalender(onDatePicked: (Long) -> Unit) {
+    getCalender().also {
+        it.addOnPositiveButtonClickListener(onDatePicked)
+    }.show(this, "tag")
 }
+
+fun getCalender() = MaterialDatePicker.Builder.datePicker()
+    .setTitleText("Choose End Date")
+    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+    .setCalendarConstraints(
+        CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointBackward.now()).build()
+    )
+    .build()
 
 fun LocalDate.formatter(): String = this.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-val getCurrentDate: String = LocalDate.now().formatter()
+val currentDate: LocalDate = LocalDate.now()
 
-val getPastDate: String = LocalDate.now().minusDays(30).formatter()
+fun Long.toFormattedDate(): String = this.instantToLocal().formatter()
+
+fun Long.toPastFormattedDate(): String = this.instantToLocal().minus().formatter()
+
+val getCurrentFormattedDate: String = currentDate.formatter()
+
+val getPastFormattedDate: String = currentDate.minus().formatter()
+
+fun LocalDate.minus(): LocalDate = this.minusDays(30)
+
+fun Long.instantToLocal(): LocalDate =
+    Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()

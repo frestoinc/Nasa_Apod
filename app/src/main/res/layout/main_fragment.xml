@@ -62,6 +62,16 @@
             android:layout_height="wrap_content"
             app:constraint_referenced_ids="mf_img,mf_text_empty" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mf_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:contentDescription="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_find" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

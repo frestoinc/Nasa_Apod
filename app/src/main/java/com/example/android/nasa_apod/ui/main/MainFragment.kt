@@ -11,16 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.nasa_apod.R
 import com.example.android.nasa_apod.databinding.MainFragmentBinding
-import com.example.android.nasa_apod.domain.util.Event
-import com.example.android.nasa_apod.domain.util.Resource
-import com.example.android.nasa_apod.domain.util.exhaustive
-import com.example.android.nasa_apod.domain.util.showSnackBarError
+import com.example.android.nasa_apod.domain.util.*
 import com.example.android.nasa_apod.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.main_fragment) {
@@ -48,7 +45,6 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             R.id.menu_refresh -> {
-                Timber.e("abc")
                 viewModel.refreshData()
                 true
             }
@@ -77,6 +73,23 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             adapter = mainAdapter
             layoutManager = LinearLayoutManager(requireContext())
             setHasFixedSize(true)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0 || dy < 0 && binding.mfFab.isShown)
+                        binding.mfFab.hide()
+                }
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                        binding.mfFab.show()
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
+            })
+        }
+        binding.mfFab.setOnClickListener {
+            childFragmentManager.showCalender {
+                viewModel.updateDate(it)
+            }
         }
     }
 
@@ -91,7 +104,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                                 event.error.localizedMessage ?: getString(R.string.mainErrorUnknown)
                             )
                         )
-                    }.exhaustive
+                    }
                 }
             }
             it.launchWhenStarted {

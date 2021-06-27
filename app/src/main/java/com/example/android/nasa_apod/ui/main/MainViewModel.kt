@@ -27,41 +27,60 @@ class MainViewModel @Inject constructor(private val repository: ApodRepository) 
     val errorEvents = errorEventChannel.receiveAsFlow()
 
     private val refreshChannel = Channel<Refresh>()
-    val refreshEvent = refreshChannel.receiveAsFlow()
+    private val refreshEvent = refreshChannel.receiveAsFlow()
 
-    val dateUpdateChannel = Channel<ApodPost>()
-    val dateEvent = dateUpdateChannel.receiveAsFlow()
+    private val dateUpdateChannel = Channel<ApodPost>(1)
+    private val dateEvent = dateUpdateChannel.receiveAsFlow()
 
-    val lists = refreshEvent
-        .flatMapLatest { refresh ->
-            repository.getLatestApods(
-                isRefresh = refresh == Refresh.FORCE,
-                param = currentDate().toCustomMap(gson),
-                onSuccess = {},
-                onError = { throwable ->
-                    throwable.printStackTrace()
-                    viewModelScope.launch {
-                        errorEventChannel.send(Event.ShowErrorMessage(throwable))
-                    }
+    val lists = dateEvent.combine(refreshEvent) { date, refresh ->
+        Pair(date, refresh)
+    }.flatMapLatest { value ->
+        repository.getLatestApods(
+            isRefresh = value.second == Refresh.FORCE,
+            param = value.first.toCustomMap(gson),
+            onSuccess = {},
+            onError = { throwable ->
+                throwable.printStackTrace()
+                viewModelScope.launch {
+                    errorEventChannel.send(Event.ShowErrorMessage(throwable))
                 }
-            )
-        }
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+            }
+        )
+    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     fun loadData() {
         if (lists.value !is Resource.Loading) {
             viewModelScope.launch { refreshChannel.send(Refresh.NORMAL) }
+            viewModelScope.launch { dateUpdateChannel.send(currentDate()) }
         }
     }
 
-    fun refreshData() {
+    fun refreshData(date: ApodPost = currentDate()) {
         if (lists.value !is Resource.Loading) {
+            viewModelScope.launch {
+                dateUpdateChannel.send(date)
+            }
             viewModelScope.launch {
                 refreshChannel.send(Refresh.FORCE)
             }
         }
     }
 
+    fun updateDate(epoch: Long) {
+        ApodPost(
+            apiKey = apiKey,
+            endDate = epoch.toFormattedDate(),
+            startDate = epoch.toPastFormattedDate()
+        ).also {
+            refreshData(it)
+        }
+
+    }
+
     private fun currentDate(): ApodPost =
-        ApodPost(apiKey = apiKey, endDate = getCurrentDate, startDate = getPastDate)
+        ApodPost(
+            apiKey = apiKey,
+            endDate = getCurrentFormattedDate,
+            startDate = getPastFormattedDate
+        )
 }
