@@ -11,4 +11,9 @@
 
     <!-- Menu -->
     <string name="menuRefresh">Refresh</string>
+
+    <!--Test-->
+    <string name="loremShort">Lorem ipsum dolor sit amet</string>
+    <string name="loremMedium">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</string>
+    <string name="loremLong">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur</string>
 </resources>
